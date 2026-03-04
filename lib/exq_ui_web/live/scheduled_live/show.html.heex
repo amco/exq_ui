@@ -1,8 +1,10 @@
-<.live_component config={@config} module={ExqUIWeb.StatsComponent} id="stats" />
-<.live_component
-  config={@config}
-  module={ExqUIWeb.JobDetailsComponent}
-  id="jobs-details"
-  item={@item}
-  actions={@actions}
-/>
+<div id="scheduled-show">
+  <.live_component config={@config} module={ExqUIWeb.StatsComponent} id="stats" />
+  <.live_component
+    config={@config}
+    module={ExqUIWeb.JobDetailsComponent}
+    id="jobs-details"
+    item={@item}
+    actions={@actions}
+  />
+</div>

@@ -21,11 +21,9 @@
         <li class="nav-item">
           <%= nav_link(@socket, "Dead", Routes.dead_index_path(@config)) %>
         </li>
-        <%= if @exq_scheduler_name do %>
-          <li class="nav-item">
-            <%= nav_link(@socket, "Recurring", Routes.recurring_index_path(@config)) %>
-          </li>
-        <% end %>
+        <li class="nav-item" style={if @exq_scheduler_name, do: nil, else: "display:none"}>
+          <%= nav_link(@socket, "Recurring", Routes.recurring_index_path(@config)) %>
+        </li>
       </ul>
     </div>
     <form class="d-flex align-items-center" phx-target="stats">
