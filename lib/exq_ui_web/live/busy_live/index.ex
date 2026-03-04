@@ -4,35 +4,38 @@ defmodule ExqUIWeb.BusyLive.Index do
   alias ExqUI.Queue
 
   @impl true
-
-  def mount(_params, %{"config" => config}, socket) do
-    processes = Queue.list_current_jobs(config)
-
-    {:ok,
-     assign(socket, %{
-       config: config,
-       columns: [
-         %{header: "Node", accessor: fn item -> item.process.host end},
-         %{header: "PID", accessor: fn item -> item.process.pid end},
-         %{header: "JID", accessor: fn item -> item.job.jid end},
-         %{header: "Queue", accessor: fn item -> item.job.queue end},
-         %{header: "Module", accessor: fn item -> item.job.class end},
-         %{
-           header: "Arguments",
-           text_break: true,
-           accessor: fn item -> inspect(item.job.args) end
-         },
-         %{header: "Started", accessor: fn item -> human_time(item.process.run_at) end}
-       ],
-       actions: [
-         %{name: "cancel", label: "Cancel"}
-       ],
-       items: processes,
-       total: 0,
-       current_page: 1,
-       page_size: 1,
-       nodes: Queue.list_nodes(config)
-     })}
+  def mount(_params, session, socket) do
+    case Map.get(session, "config") do
+      nil ->
+        {:ok, push_redirect(socket, to: "/")}
+      config ->
+        processes = Queue.list_current_jobs(config)
+        {:ok,
+         assign(socket, %{
+           config: config,
+           columns: [
+             %{header: "Node", accessor: fn item -> item.process.host end},
+             %{header: "PID", accessor: fn item -> item.process.pid end},
+             %{header: "JID", accessor: fn item -> item.job.jid end},
+             %{header: "Queue", accessor: fn item -> item.job.queue end},
+             %{header: "Module", accessor: fn item -> item.job.class end},
+             %{
+               header: "Arguments",
+               text_break: true,
+               accessor: fn item -> inspect(item.job.args) end
+             },
+             %{header: "Started", accessor: fn item -> human_time(item.process.run_at) end}
+           ],
+           actions: [
+             %{name: "cancel", label: "Cancel"}
+           ],
+           items: processes,
+           total: 0,
+           current_page: 1,
+           page_size: 1,
+           nodes: Queue.list_nodes(config)
+         })}
+    end
   end
 
   @impl true

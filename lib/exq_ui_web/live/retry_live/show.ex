@@ -4,15 +4,22 @@ defmodule ExqUIWeb.RetryLive.Show do
   alias ExqUI.Queue
 
   @impl true
-  def mount(%{"score" => score, "jid" => jid}, %{"config" => config}, socket) do
-    socket =
-      assign(socket, :actions, [
-        %{name: "delete", label: "Delete"},
-        %{name: "retry_now", label: "Retry Now"}
-      ])
-      |> assign(:config, config)
+  def mount(params, session, socket) do
+    score = Map.get(params, "score")
+    jid = Map.get(params, "jid")
+    case Map.get(session, "config") do
+      nil ->
+        {:ok, push_redirect(socket, to: "/")}
+      config ->
+        socket =
+          assign(socket, :actions, [
+            %{name: "delete", label: "Delete"},
+            %{name: "retry_now", label: "Retry Now"}
+          ])
+          |> assign(:config, config)
 
-    {:ok, assign(socket, job_details(config, score, jid))}
+        {:ok, assign(socket, job_details(config, score, jid))}
+    end
   end
 
   @impl true

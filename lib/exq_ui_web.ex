@@ -28,7 +28,8 @@ defmodule ExqUIWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {ExqUIWeb.LayoutView, :live}
+        layout: {ExqUIWeb.LayoutView, :live},
+        container: {:div, [id: "phx-live-view-root"]}
 
       unquote(view_helpers())
     end

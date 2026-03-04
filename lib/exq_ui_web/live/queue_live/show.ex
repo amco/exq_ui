@@ -6,24 +6,30 @@ defmodule ExqUIWeb.QueueLive.Show do
   @page_size 30
 
   @impl true
-  def mount(%{"name" => name} = params, %{"config" => config}, socket) do
-    socket =
-      assign(socket, :columns, [
-        %{header: "Module", accessor: fn item -> item.job.class end},
-        %{header: "Arguments", text_break: true, accessor: fn item -> inspect(item.job.args) end}
-      ])
-      |> assign(:actions, [
-        %{name: "delete", label: "Delete"},
-        %{
-          name: "delete_all",
-          label: "Delete All",
-          confirm:
-            "Are you sure you want to delete all jobs in this queue? This action cannot be undone."
-        }
-      ])
-      |> assign(:config, config)
+  def mount(params, session, socket) do
+    name = Map.get(params, "name")
+    case Map.get(session, "config") do
+      nil ->
+        {:ok, push_redirect(socket, to: "/")}
+      config ->
+        socket =
+          assign(socket, :columns, [
+            %{header: "Module", accessor: fn item -> item.job.class end},
+            %{header: "Arguments", text_break: true, accessor: fn item -> inspect(item.job.args) end}
+          ])
+          |> assign(:actions, [
+            %{name: "delete", label: "Delete"},
+            %{
+              name: "delete_all",
+              label: "Delete All",
+              confirm:
+                "Are you sure you want to delete all jobs in this queue? This action cannot be undone."
+            }
+          ])
+          |> assign(:config, config)
 
-    {:ok, assign(socket, jobs_details(config, name, params["page"] || "1"))}
+        {:ok, assign(socket, jobs_details(config, name, Map.get(params, "page") || "1"))}
+    end
   end
 
   @impl true

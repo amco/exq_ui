@@ -6,36 +6,41 @@ defmodule ExqUIWeb.DeadLive.Index do
   @page_size 30
 
   @impl true
-  def mount(params, %{"config" => config}, socket) do
-    socket =
-      assign(socket, :columns, [
-        %{
-          header: "Last Failed",
-          accessor: fn item ->
-            live_link(human_time(item.scheduled_at),
-              to: Routes.dead_show_path(config, item.score, item.id),
-              class: "nounderline"
-            )
-          end
-        },
-        %{header: "Retry Count", accessor: fn item -> item.job.retry_count end},
-        %{header: "Queue", accessor: fn item -> item.job.queue end},
-        %{header: "Module", accessor: fn item -> item.job.class end},
-        %{header: "Arguments", text_break: true, accessor: fn item -> inspect(item.job.args) end},
-        %{header: "Error", text_break: true, accessor: fn item -> item.job.error_message end}
-      ])
-      |> assign(:actions, [
-        %{name: "delete", label: "Delete"},
-        %{
-          name: "delete_all",
-          label: "Delete All",
-          confirm: "Are you sure you want to delete all dead jobs? This action cannot be undone."
-        },
-        %{name: "dequeue_now", label: "Retry Now"}
-      ])
-      |> assign(:config, config)
+  def mount(params, session, socket) do
+    case Map.get(session, "config") do
+      nil ->
+        {:ok, push_redirect(socket, to: "/")}
+      config ->
+        socket =
+          assign(socket, :columns, [
+            %{
+              header: "Last Failed",
+              accessor: fn item ->
+                live_link(human_time(item.scheduled_at),
+                  to: Routes.dead_show_path(config, item.score, item.id),
+                  class: "nounderline"
+                )
+              end
+            },
+            %{header: "Retry Count", accessor: fn item -> item.job.retry_count end},
+            %{header: "Queue", accessor: fn item -> item.job.queue end},
+            %{header: "Module", accessor: fn item -> item.job.class end},
+            %{header: "Arguments", text_break: true, accessor: fn item -> inspect(item.job.args) end},
+            %{header: "Error", text_break: true, accessor: fn item -> item.job.error_message end}
+          ])
+          |> assign(:actions, [
+            %{name: "delete", label: "Delete"},
+            %{
+              name: "delete_all",
+              label: "Delete All",
+              confirm: "Are you sure you want to delete all dead jobs? This action cannot be undone."
+            },
+            %{name: "dequeue_now", label: "Retry Now"}
+          ])
+          |> assign(:config, config)
 
-    {:ok, assign(socket, jobs_details(config, params["page"] || "1"))}
+        {:ok, assign(socket, jobs_details(config, Map.get(params, "page") || "1"))}
+    end
   end
 
   @impl true
