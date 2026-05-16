@@ -37,3 +37,36 @@ svg {
 .phx-disconnected * {
   pointer-events: none;
 }
+
+.submit-loader {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  overflow: hidden;
+  display: none;
+}
+
+.submit-loader::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 120px;
+  background: $primary;
+  animation: submit-loader 1s linear infinite;
+}
+
+@keyframes submit-loader {
+  0% {
+    left: 0;
+    transform: translateX(-100%);
+  }
+
+  100% {
+    left: 100%;
+    transform: translateX(0);
+  }
+}
+
+.phx-submit-loading .submit-loader {
+  display: block;
+}
