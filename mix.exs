@@ -58,7 +58,7 @@ defmodule ExqUI.MixProject do
       """,
       maintainers: ["Anantha Kumaran", "Alex Kira"],
       links: %{"GitHub" => "https://github.com/akira/exq_ui"},
-      licenses: ["Apache2.0"],
+      licenses: ["Apache-2.0"],
       files:
         ~w(lib priv test assets/js assets/css assets/static) ++
           ~w(LICENSE mix.exs README.md CHANGELOG.md)
