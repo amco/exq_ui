@@ -1,6 +1,6 @@
 env:
-  ELIXIR_VERSION: "1.16"
-  OTP_VERSION: "26"
+  ELIXIR_VERSION: "1.19"
+  OTP_VERSION: "28"
 on:
   push:
     tags:
@@ -16,7 +16,7 @@ jobs:
           elixir-version: ${{ env.ELIXIR_VERSION }}
           otp-version: ${{ env.OTP_VERSION }}
       - name: Publish to Hex
-        uses: synchronal/hex-publish-action@v3
+        uses: synchronal/hex-publish-action@v4
         with:
           name: exq_ui
           key: ${{ secrets.HEX_PM_KEY }}
