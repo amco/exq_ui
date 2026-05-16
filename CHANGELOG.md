@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [0.19.0] - 2026-05-16
+
+### Added
+
+- Add support for LiveView 1.1 #155 by @neominik
+- Add confirm dialog for delete all operations #157 by @mkarnebeek
+
+### Breaking Changes
+
+- Drop support for Phoenix < 1.8
+- Drop support for LiveView < 1.1
+- Drop support for Elixir < 1.16
+
 ## [0.18.0] - 2025-11-04
 
 ### Added
