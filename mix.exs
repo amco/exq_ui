@@ -34,6 +34,7 @@ defmodule ExqUI.MixProject do
 
   defp deps do
     [
+      {:bandit, "~> 1.0", optional: true},
       {:exq, ">= 0.23.0"},
       {:exq_scheduler, "~> 1.0", optional: true},
       {:phoenix_live_view, "~> 1.1"},
@@ -42,7 +43,7 @@ defmodule ExqUI.MixProject do
       {:phoenix_html_helpers, "~> 1.0"},
       {:phoenix, "~> 1.7"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
+      {:plug_cowboy, "~> 2.0", optional: true},
       {:redix, ">= 0.9.0"},
       {:floki, ">= 0.30.0", only: :test},
       # docs
